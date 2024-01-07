@@ -5,7 +5,10 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
     header("Location: home.php ");
     exit();
 }
-
+if (!isset($_GET['cat_pk'])) {
+    header("Location: erstekategorie.php ");
+    exit();
+}
 ?>
 <div class="layout-wrapper layout-content-navbar layout-without-menu">
     <div class="layout-container">
@@ -53,42 +56,13 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                     </div>
                     <!-- EndaddCategoryModal -->
 
-                    <!-- EDIT Modal -->
-                    <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <form action="" method="post">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="modalCenterTitle">Edit Category</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col mb-3">
-                                                <label for="nameWithTitle" class="form-label">Category Name</label>
-                                                <input type="hidden" name="edit_category_pk" id="edit_category_pk" />
-                                                <input type="text" id="edit_category_name" name="edit_category_name" class="form-control" placeholder="Enter Category" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                                            Close
-                                        </button>
-                                        <button type="submit" class="btn btn-primary" name="updateCategory">Update</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
                     <!-- Question Modal -->
                     <div class="modal fade" id="editQuestionModal" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <form action="" method="post">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="viewCategorymodalCenterTitle">Add Category Question</h5>
+                                        <h5 class="modal-title" id="viewCategorymodalCenterTitle">Edit Category Question</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -182,7 +156,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                     </div>
 
                     <!-- Delete Modal -->
-                    <div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal fade" id="deleteQuestionModal" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <form action="" method="post">
                                 <div class="modal-content">
@@ -193,9 +167,8 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                     <div class="modal-body">
                                         <div class="row">
                                             <div class="col mb-3">
-                                                <label for="nameWithTitle" class="form-label">Category Name</label>
+                                                <label id="deleteQuestionTitle" for="deleteQuestionTitle" class="form-label">Category Name</label>
                                                 <input type="hidden" name="delete_category_pk" id="delete_category_pk" />
-                                                <input type="text" id="delete_category_name" name="delete_category_name" class="form-control" placeholder="Enter Category" disabled />
                                             </div>
                                         </div>
                                     </div>
@@ -203,7 +176,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                             Close
                                         </button>
-                                        <button type="submit" class="btn btn-primary" name="deleteCategory">Confirm</button>
+                                        <button type="submit" class="btn btn-primary" name="deleteQuestionbtn">Confirm</button>
                                     </div>
                                 </div>
                             </form>
@@ -275,7 +248,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                                     </button>
                                                     <div class="dropdown-menu">
                                                         <button data-pk="<?php echo $row['pk']; ?>" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editQuestionModal"><i class="bx bx-edit-alt me-1"></i> Edit</button>
-                                                        <button data-pk="<?php echo $row['pk']; ?>" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal"><i class="bx bx-trash me-1"></i> Delete</button>
+                                                        <button data-pk="<?php echo $row['pk']; ?>" data-name="<?php echo $row['question']; ?>" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteQuestionModal"><i class="bx bx-trash me-1"></i> Delete</button>
                                                     </div>
                                                 </div>
                                             </td>
@@ -299,37 +272,33 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
 <script>
     $(document).ready(function() {
         console.log("Ready");
-        $('#editCategoryModal').on('show.bs.modal', function(event) {
-            console.log("Edit Category Clicked");
-            var button = $(event.relatedTarget);
-            var pk = button.data('pk');
-            var name = button.data('name');
-            $('#edit_category_pk').val(pk); // Assuming 'pk' is a key in your fetched data
-            $('#edit_category_name').val(name); // Assuming 'pk' is a key in your fetched data
-
-        });
-        $('#deleteCategoryModal').on('show.bs.modal', function(event) {
-            console.log("Delete Category Clicked");
+        $('#deleteQuestionModal').on('show.bs.modal', function(event) {
+            console.log("Delete Question Clicked");
             var button = $(event.relatedTarget);
             var pk = button.data('pk');
             var name = button.data('name');
             $('#delete_category_pk').val(pk); // Assuming 'pk' is a key in your fetched data
-            $('#delete_category_name').val(name); // Assuming 'pk' is a key in your fetched data
+            $('#deleteQuestionTitle').text('Do you want to delete this Question "' + name + '"');
 
         });
         $('#editQuestionModal').on('show.bs.modal', function(event) {
             console.log("Add Question Btn added");
-            // Clear options for falseQuestion
-            // $("#falseQuestion").empty().append('<option value="0">No Child Question</option>');
-            // 
-            // Clear options for trueQuestion
-            // $("#trueQuestion").empty().append('<option value="0">No Child Question</option>');
             var button = $(event.relatedTarget);
             var pk = button.data('pk');
             createCookieSeconds("question_id", pk, 10);
 
+            var currentUrl = new URL(window.location.href);
+            if (currentUrl.searchParams.has('question_id')) {
+                currentUrl.searchParams.set('question_id', pk);
+            } else {
+                currentUrl.searchParams.append('question_id', pk);
+            }
+
+            // Set the new URL
+            window.history.replaceState({}, document.title, currentUrl.toString());
+
             <?php
-            $question_id = isset($_COOKIE["question_id"]) ? $_COOKIE["question_id"] : null;
+            $question_id = isset($_GET["question_id"]) ? $_GET["question_id"] : null;
             if ($question_id) {
                 $query = "SELECT * FROM category_question WHERE pk = '$question_id'";
                 $result = mysqli_query($conn, $query);
@@ -340,46 +309,51 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                 $result02 = mysqli_query($conn, $query);
                 $rows = mysqli_fetch_all($result02, MYSQLI_ASSOC);
 
-                $cat_id =  $question_obj['category_id'];
+                $cat_id =  $_GET['cat_pk'];
                 $query = "SELECT * FROM category_question WHERE category_id = '$cat_id'";
                 $res = mysqli_query($conn, $query);
                 $rows21 = mysqli_fetch_all($res, MYSQLI_ASSOC);
             }
             ?>
             var question_obj = <?php echo isset($question_obj) ? json_encode($question_obj) : 'null'; ?>;
+            console.log(question_obj);
             var answer_qs = <?php echo isset($rows) ? json_encode($rows) : 'null'; ?>;
             var question__qs = <?php echo isset($rows21) ? json_encode($rows21) : 'null'; ?>;
-            var falseQuestion = $('#falseQuestion'); // Replace with the actual ID or selector of your select element
-            // Clear existing options (if any)
-            falseQuestion.empty();
-            // Add the default option
-            falseQuestion.append('<option value="0">No Child Question</option>');
-            question__qs.forEach(function(question) {
-                var option = $('<option value="' + question.pk + '">' + question.question + '</option>');
+            console.log("qs");
+            console.log(question__qs);
 
-                // Check if q_id matches question.pk
-                if (question_obj['false_child_question'] == question.pk) {
-                    option.attr('selected', 'selected');
-                }
 
-                falseQuestion.append(option);
-            });
+            if (question__qs !== null) {
+                console.log("question__qs");
+                console.log(question__qs);
 
-            var trueQuestion = $('#trueQuestion'); // Replace with the actual ID or selector of your select element
-            // Clear existing options (if any)
-            trueQuestion.empty();
-            // Add the default option
-            trueQuestion.append('<option value="0">No Child Question</option>');
-            question__qs.forEach(function(question) {
-                var option = $('<option value="' + question.pk + '">' + question.question + '</option>');
+                var trueQuestion = $('#trueQuestion');
+                trueQuestion.empty();
+                trueQuestion.append('<option value="0">No Child Question</option>');
 
-                // Check if q_id matches question.pk
-                if (question_obj['true_child_question'] == question.pk) {
-                    option.attr('selected', 'selected');
-                }
+                var falseQuestion = $('#falseQuestion');
+                falseQuestion.empty();
+                falseQuestion.append('<option value="0">No Child Question</option>');
 
-                trueQuestion.append(option);
-            });
+                question__qs.forEach(function(question) {
+                    // Create separate options for each question
+                    var optionFalse = $('<option value="' + question.pk + '">' + question.question + '</option>');
+                    var optionTrue = $('<option value="' + question.pk + '">' + question.question + '</option>');
+
+                    // Check if q_id matches question.pk and set the selected attribute individually
+                    if (question_obj['false_child_question'] == question.pk) {
+                        optionFalse.attr('selected', 'selected');
+                    }
+                    falseQuestion.append(optionFalse);
+
+                    if (question_obj['true_child_question'] == question.pk) {
+                        optionTrue.attr('selected', 'selected');
+                    }
+                    trueQuestion.append(optionTrue);
+                });
+            }
+
+
 
 
             if (answer_qs !== null || question_obj !== null) {
@@ -393,7 +367,6 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                     var id = "#answer" + (i + 1);
                     $(id).val(answerObj['answer']);
 
-                    console.log(answerObj['answer'] + " anse");
 
                     if (answerObj['status'] == 1) {
                         var desiredRadioId = "defaultRadio" + (i + 1);
@@ -514,9 +487,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </script>';
         }
     }
-    if (isset($_POST['deleteCategory'])) {
+    if (isset($_POST['deleteQuestionbtn'])) {
         $category_pk = $_POST['delete_category_pk'];
-        $query = "DELETE FROM category WHERE pk = $category_pk";
+        $query = "DELETE FROM category_question WHERE pk = $category_pk";
         $result = mysqli_query($conn, $query);
         if (!$result) {
             $errorMessage = 'Error Occured while Deleting';
@@ -529,7 +502,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 });
             </script>';
         } else {
-            $successMessage = 'Category Deleted Successfully';
+            $query = "DELETE FROM answer WHERE question_id = $category_pk";
+            $result = mysqli_query($conn, $query);
+            $successMessage = 'Question Deleted Successfully';
             echo '<script>
                 document.addEventListener("DOMContentLoaded", function() {
                     var htmlContent = \'<div class="alert alert-success alert-dismissible" role="alert">\' 

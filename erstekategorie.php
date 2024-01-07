@@ -314,8 +314,21 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
             var button = $(event.relatedTarget);
             var pk = button.data('pk');
             createCookie("pk", pk, "1");
+            var currentUrl = new URL(window.location.href);
+
+            // Check if the URL already contains a question_id parameter
+            if (currentUrl.searchParams.has('pk')) {
+                // If it does, update the value of the existing parameter
+                currentUrl.searchParams.set('pk', pk);
+            } else {
+                // If it doesn't, add the pk parameter
+                currentUrl.searchParams.append('pk', pk);
+            }
+
+            // Set the new URL
+            window.history.replaceState({}, document.title, currentUrl.toString());
             <?php
-            $cat_id = isset($_COOKIE["pk"]) ? $_COOKIE["pk"] : null;
+            $cat_id = isset($_GET["pk"]) ? $_GET["pk"] : null;
             if ($cat_id) {
                 // Your code that uses $cat_id
                 $query = "SELECT * FROM category_question WHERE category_id = '$cat_id'";
@@ -325,22 +338,20 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
             ?>
             var question__qs = <?php echo isset($rows21) ? json_encode($rows21) : 'null'; ?>;
             if (question__qs !== null) {
-
-                var falseQuestion = $('#falseQuestion'); // Replace with the actual ID or selector of your select element
-                // Clear existing options (if any)
+                console.log("question__qs");
+                console.log(question__qs);
+                var falseQuestion = $('#falseQuestion');
                 falseQuestion.empty();
-                // Add the default option
                 falseQuestion.append('<option value="0">No Child Question</option>');
+                
                 question__qs.forEach(function(question) {
                     var option = $('<option value="' + question.pk + '">' + question.question + '</option>');
                     falseQuestion.append(option);
 
                 });
 
-                var trueQuestion = $('#trueQuestion'); // Replace with the actual ID or selector of your select element
-                // Clear existing options (if any)
+                var trueQuestion = $('#trueQuestion');
                 trueQuestion.empty();
-                // Add the default option
                 trueQuestion.append('<option value="0">No Child Question</option>');
                 question__qs.forEach(function(question) {
                     var option = $('<option value="' + question.pk + '">' + question.question + '</option>');
@@ -354,7 +365,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
         });
 
 
-       
+
 
         function createCookie(name, value, days) {
             var expires;
