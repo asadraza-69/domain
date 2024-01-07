@@ -7,10 +7,5 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.+?)/?$ $1.php [L]
 
-# Add trailing slash if not present
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.*[^/])$ /$1/ [L,R=301]
-
-
-# Rewrite for category.php with additional parameter
-RewriteRule ^category.php/([^/]+)/?$ category.php?urlparams=$1 [L,QSA]
+# Rewrite for home.php with additional parameter
+RewriteRule ^home/([^/]+)/?$ home.php?urlparams=$1 [L,QSA]
