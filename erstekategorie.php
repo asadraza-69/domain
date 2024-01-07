@@ -142,7 +142,7 @@ require "connection.php";
             <?php
             $urlParams = isset($_GET['args']) ? $_GET['args'] : '';
             $urlParamsDecoded = urldecode($urlParams);
-            echo "console.log('URL Params:', '$urlParamsDecoded');";
+            // echo "console.log('URL Params:', '$urlParamsDecoded');";
 
             $urlParamsDecoded = mysqli_real_escape_string($conn, $urlParamsDecoded);
             $query = "SELECT * FROM category WHERE name = '$urlParamsDecoded'";
@@ -150,7 +150,7 @@ require "connection.php";
 
             if ($result) {
                 $category_obj = mysqli_fetch_assoc($result);
-                echo "console.log('Category found:',", json_encode($category_obj), ");";
+                // echo "console.log('Category found:',", json_encode($category_obj), ");";
                 echo "$('#categoryTitleHead').text('" . $category_obj['name'] . "').css('text-transform', 'uppercase');";
 
                 $category_pk = $category_obj['pk'];
@@ -161,7 +161,7 @@ require "connection.php";
                 if ($numRows > 0) {
                     $randomQuestionObj = $rows[rand(0, $numRows - 1)];
                     echo "$('#categoryQuestion').text('" . $randomQuestionObj['question'] . "').css('text-transform', 'uppercase');";
-                    echo "console.log('Category Question found:',", json_encode($randomQuestionObj), ");";
+                    // echo "console.log('Category Question found:',", json_encode($randomQuestionObj), ");";
                     $question_pk = $randomQuestionObj['pk'];
                     $query = "SELECT * FROM answer WHERE question_id = $question_pk";
                     $result = mysqli_query($conn, $query);
@@ -169,12 +169,12 @@ require "connection.php";
 
                     while ($rows = mysqli_fetch_array($result)) {
                         $id = "#answer" . $index;
-                        echo "console.log('Category Answer found:',", json_encode($id), ");";
+                        // echo "console.log('Category Answer found:',", json_encode($id), ");";
                         echo "$('" . $id . "').text('" . strtoupper($rows['answer']) . "');";
 
                         // Fix: Wrap the desiredRadioId in quotes
                         echo "var desiredRadioId = 'answerradio" . $index . "';";
-                        echo "console.log('desiredRadioId:' +desiredRadioId);";
+                        // echo "console.log('desiredRadioId:' +desiredRadioId);";
                         echo "if (" . $rows['status'] . " == 1) {";
                         // Fix: Add missing quotes around #desiredRadioId
                         echo "    $('#' + desiredRadioId).prop('value', 1);";
@@ -190,7 +190,7 @@ require "connection.php";
                     echo "No rows found.";
                 }
             } else {
-                echo "console.log('Error fetching category.');";
+                // echo "console.log('Error fetching category.');";
                 echo "$('#deleteQuestionModal').modal('show');";
             }
             ?>
