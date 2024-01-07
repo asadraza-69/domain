@@ -14,11 +14,11 @@
                     echo '<a class="nav-item nav-link active" href="javascript:void(0)">Home</a>';
                 }
                 if (isset($_SESSION['user']) && $_SESSION['user']['role'] == 'admin') {
-                   echo '<a class="nav-item nav-link" href="user_management.php">user management</a>';
-                   echo '<a class="nav-item nav-link" href="erstekategorie.php">erstekategorie</a>';
+                    echo '<a class="nav-item nav-link" href="user_management.php">user management</a>';
+                    echo '<a class="nav-item nav-link" href="erstekategorie.php">erstekategorie</a>';
                 }
                 if (!isset($_SESSION['user'])) {
-                   echo '<a class="nav-item nav-link" href="signup.php">Registration</a>';
+                    echo '<a class="nav-item nav-link" href="signup.php">Registration</a>';
                 }
                 ?>
             </div>
@@ -27,11 +27,11 @@
                     <button class="btn btn-light btn-sm" type="button" onclick="redirectToLoginPage()">Login</button>
                 </form>
             <?php endif; ?>
-            
+
             <?php if (isset($_SESSION['user'])) : ?>
-                <form onsubmit="return false">
-                    <button class="btn btn-danger btn-sm" type="button" onclick="redirectToLogoutPage()">Logout</button>
-                </form>
+                <div>
+                    <a href="logout.php" class="btn btn-sm btn-danger"><i class="bx bx-log-out-circle me-1"></i>Logout</a>
+                </div>
             <?php endif; ?>
 
 
@@ -43,6 +43,7 @@
         // Perform the redirection to the login page
         window.location.href = 'index.php';
     }
+
     function redirectToLoginPage() {
         // Perform the redirection to the login page
         window.location.href = 'logout.php';

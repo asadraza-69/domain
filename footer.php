@@ -11,7 +11,7 @@
                 </script>, All Copyrights reserved
             </div>
             <div>
-                <a href="logout.php" class="btn btn-sm btn-outline-danger"><i class="bx bx-log-out-circle me-1"></i>Logout</a>
+                <!-- <a href="logout.php" class="btn btn-sm btn-outline-danger"><i class="bx bx-log-out-circle me-1"></i>Logout</a> -->
             </div>
         </div>
     </footer>
