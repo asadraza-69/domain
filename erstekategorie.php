@@ -42,11 +42,38 @@ require "connection.php";
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
+
 </head>
 
 <body>
 
     <div class="container-xxl">
+        <div class="modal fade" id="deleteQuestionModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog" role="document" data-backdrop="static" data-keyboard="false">
+                <form action="" method="post">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Oops Invalid Category</h5>
+                            <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <label id="deleteQuestionTitle" for="deleteQuestionTitle" class="form-label">No Category Found</label>
+                                    <!-- <input type="hidden" name="delete_category_pk" id="delete_category_pk" /> -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit" class="btn btn-primary" name="deleteQuestionbtn">Confirm</button>
+                        </div> -->
+                    </div>
+                </form>
+            </div>
+        </div>
         <div class="authentication-wrapper authentication-basic container-p-y">
             <div class="authentication-inner">
                 <!-- Register Card -->
@@ -63,37 +90,46 @@ require "connection.php";
                             </a>
                         </div>
                         <!-- /Logo -->
-                        <div id="authenti-inner"></div>
 
-                        <h4 class="mb-2">Welcome to Domain.de 🚀</h4>
-                        <p class="mb-4">Sign up Here</p>
 
+                        <h3 class="mb-2" id="categoryTitleHead">Category Name Will be Here</h3>
+                        <div id="authenti-inner" class="py-2"></div>
                         <form id="formAuthentication" class="mb-3" action="" method="POST">
-                            <div class="mb-3">
-                                <label for="fullname" class="form-label">Full name</label>
-                                <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Enter your Full name" autofocus required />
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email" required />
-                            </div>
-                            <div class="mb-3 form-password-toggle">
-                                <label class="form-label" for="password">Password</label>
-                                <div class="input-group input-group-merge">
-                                    <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" required />
-                                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                            <h5 class="mb-2" id="categoryQuestion">Category Quewstion Will be Here</h5>
+                            <p class="mb-4"></p>
+                            <div class="row  d-flex align-items-center">
+                                <div class="col-1 mb-3 parent">
+                                    <input name="correctAnswer" class="form-check-input" type="radio" value="0" id="answerradio1">
                                 </div>
+                                <div class="col-11 mb-3 parent">
+                                    <h5 class="mb-2" id="answer1" name="answer1">First Correct answer</h5>
+                                </div>
+                                <div class="col-1 mb-3">
+                                    <input name="correctAnswer" class="form-check-input" type="radio" value="0" id="answerradio2">
+                                </div>
+                                <div class="col-11 mb-3 parent">
+                                    <h5 class="mb-2" id="answer2" name="answer2">Second Correct answer</h5>
+                                </div>
+                                <div class="col-1 mb-3 parent">
+                                    <input name="correctAnswer" class="form-check-input" type="radio" value="0" id="answerradio3">
+                                </div>
+                                <div class="col-11 mb-3 parent">
+                                    <h5 class="mb-2" id="answer3" name="answer3">Third Correct answer</h5>
+                                </div>
+                                <div class="col-1 mb-3 parent">
+                                    <input name="correctAnswer" class="form-check-input" type="radio" value="0" id="answerradio4">
+                                </div>
+                                <div class="col-11 mb-3 parent">
+                                    <h5 class="mb-2" id="answer4" name="answer4">Fourth Correct answer</h5>
+                                </div>
+
                             </div>
-
-                            <button class="btn btn-primary d-grid w-100 " name="addUser">Sign up</button>
+                            <div class=" d-flex align-items-center justify-content-around" id="jokerBtnDiv">
+                                <button type="button" class="btn btn-primary d-grid w-25 jokerBtnDiv" name="joker1" id="joker1">Joker1</button>
+                                <button type="button" class="btn btn-primary d-grid w-25 jokerBtnDiv" name="joker2" id="joker2">Joker2</button>
+                                <button type="button" class="btn btn-primary d-grid w-25 jokerBtnDiv" name="joker3" id="joker3">Joker3</button>
+                            </div>
                         </form>
-
-                        <p class="text-center">
-                            <span>Already have an account?</span>
-                            <a href="index.php">
-                                <span>Sign in instead</span>
-                            </a>
-                        </p>
                     </div>
                 </div>
                 <!-- Register Card -->
@@ -103,8 +139,123 @@ require "connection.php";
     <script>
         $(document).ready(function() {
             console.log("Ready");
+            <?php
+            $urlParams = isset($_GET['args']) ? $_GET['args'] : '';
+            $urlParamsDecoded = urldecode($urlParams);
+            echo "console.log('URL Params:', '$urlParamsDecoded');";
 
+            $urlParamsDecoded = mysqli_real_escape_string($conn, $urlParamsDecoded);
+            $query = "SELECT * FROM category WHERE name = '$urlParamsDecoded'";
+            $result = mysqli_query($conn, $query);
 
+            if ($result) {
+                $category_obj = mysqli_fetch_assoc($result);
+                echo "console.log('Category found:',", json_encode($category_obj), ");";
+                echo "$('#categoryTitleHead').text('" . $category_obj['name'] . "').css('text-transform', 'uppercase');";
+
+                $category_pk = $category_obj['pk'];
+                $query = "SELECT * FROM category_question WHERE category_id = $category_pk";
+                $result = mysqli_query($conn, $query);
+                $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                $numRows = count($rows);
+                if ($numRows > 0) {
+                    $randomQuestionObj = $rows[rand(0, $numRows - 1)];
+                    echo "$('#categoryQuestion').text('" . $randomQuestionObj['question'] . "').css('text-transform', 'uppercase');";
+                    echo "console.log('Category Question found:',", json_encode($randomQuestionObj), ");";
+                    $question_pk = $randomQuestionObj['pk'];
+                    $query = "SELECT * FROM answer WHERE question_id = $question_pk";
+                    $result = mysqli_query($conn, $query);
+                    $index = 1; // Make sure $index is initialized
+
+                    while ($rows = mysqli_fetch_array($result)) {
+                        $id = "#answer" . $index;
+                        echo "console.log('Category Answer found:',", json_encode($id), ");";
+                        echo "$('" . $id . "').text('" . strtoupper($rows['answer']) . "');";
+
+                        // Fix: Wrap the desiredRadioId in quotes
+                        echo "var desiredRadioId = 'answerradio" . $index . "';";
+                        echo "console.log('desiredRadioId:' +desiredRadioId);";
+                        echo "if (" . $rows['status'] . " == 1) {";
+                        // Fix: Add missing quotes around #desiredRadioId
+                        echo "    $('#' + desiredRadioId).prop('value', 1);";
+                        echo "} else {";
+                        echo "    $('#' + desiredRadioId).prop('value', 0);";
+                        echo "}";
+                        $index++;
+                    }
+                    // answer1
+                    // echo "console.log('Category Answer found:',", json_encode($rows), ");";
+
+                } else {
+                    echo "No rows found.";
+                }
+            } else {
+                echo "console.log('Error fetching category.');";
+                echo "$('#deleteQuestionModal').modal('show');";
+            }
+            ?>
+            $('button[name^="joker"]').on('click', function() {
+                $('.jokerBtnDiv').prop('disabled', true);
+                $('input[type="radio"]').prop('disabled', false);
+
+                // Get the number from the button id (assuming the id is in the format 'jokerX')
+                var jokerNumber = parseInt($(this).attr('id').replace('joker', ''));
+
+                // Disable radio buttons with value 0 based on the joker number
+                $('input[type="radio"][value="0"]').slice(0, jokerNumber).each(function() {
+                    var parentDiv = $(this).parent();
+
+                    // Disable the parent div
+                    parentDiv.prop('disabled', true);
+
+                    // Get the next sibling (assuming it's the div after the parent)
+                    var nextDiv = parentDiv.next();
+
+                    // Apply strikethrough to h5 element inside nextDiv
+                    nextDiv.find('h5').css('text-decoration', 'line-through');
+                }).prop('disabled', true);
+            });
+
+            $('input[name="correctAnswer"]').on('click', function() {
+                // Disable all radio buttons
+                $('input[name="correctAnswer"]').prop('disabled', true);
+
+                // Enable only the clicked radio button
+                $(this).prop('disabled', false);
+
+                // Get the value of the clicked radio button
+                var selectedValue = $(this).val();
+
+                // Display an alert based on the selected value
+                if (selectedValue == 0) {
+                    var htmlContent = '<div class="alert alert-danger alert-dismissible" role="alert">' +
+                        'Incorrect answer' +
+                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                    $('#authenti-inner').append(htmlContent);
+                } else {
+                    var htmlContent = '<div class="alert alert-success alert-dismissible" role="alert">' +
+                        'Correct answer' +
+                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                    $('#authenti-inner').append(htmlContent);
+                }
+                // Get the h5 element with id categoryQuestion
+                var categoryQuestionElement = $('#categoryQuestion');
+
+                // Get the text content of the h5 element
+                var categoryQuestionText = categoryQuestionElement.text();
+
+                // Create a new p element
+                var newParagraphElement = $('<p>');
+
+                // Set the text content of the new p element
+                newParagraphElement.text(<?php
+                                            echo json_encode($randomQuestionObj['description']);
+                                            ?>);
+
+                // Replace the h5 element with the new p element
+                categoryQuestionElement.replaceWith(newParagraphElement);
+
+            });
         });
     </script>
     <!-- Core JS -->

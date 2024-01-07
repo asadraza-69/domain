@@ -8,4 +8,5 @@ RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.+?)/?$ $1.php [L]
 
 # Rewrite for erstekategorie.php with additional parameter
-RewriteRule ^erstekategorie/([^/]+)/?$ erstekategorie.php?urlparams=$1 [L,QSA]
+#RewriteRule ^erstekategorie/([^/]+)/?$ erstekategorie.php?urlparams=$1 [L,QSA]
+RewriteRule ^erstekategorie/([^/]+)/?$ erstekategorie.php?urlparams=$1 [L,R=302,QSA]

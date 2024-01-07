@@ -141,7 +141,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="closeButton">
                                             Close
                                         </button>
-                                        <button type="submit" class="btn btn-primary" name="addQuestion">Add Question</button>
+                                        <button type="submit" class="btn btn-primary" name="addQuestion">Update Question</button>
                                     </div>
                                 </div>
                             </form>
