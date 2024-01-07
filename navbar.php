@@ -9,13 +9,14 @@
 
         <div class="collapse navbar-collapse" id="navbar-ex-3">
             <div class="navbar-nav me-auto">
+                <a class="nav-item nav-link active" href="home.php">Home</a>
                 <?php
                 if (isset($_SESSION['user']) && $_SESSION['user']['role'] == 'user') {
                     echo '<a class="nav-item nav-link active" href="javascript:void(0)">Home</a>';
                 }
                 if (isset($_SESSION['user']) && $_SESSION['user']['role'] == 'admin') {
                     echo '<a class="nav-item nav-link" href="user_management.php">user management</a>';
-                    echo '<a class="nav-item nav-link" href="erstekategorie.php">erstekategorie</a>';
+                    echo '<a class="nav-item nav-link" href="erstekategories.php">erstekategorie</a>';
                 }
                 if (!isset($_SESSION['user'])) {
                     echo '<a class="nav-item nav-link" href="signup.php">Registration</a>';

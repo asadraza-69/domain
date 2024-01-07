@@ -2,7 +2,7 @@
 <?php require "navbar.php" ?>
 <?php
 if (isset($_SESSION['user'])) {
-    header("Location: erstekategorie.php ");
+    header("Location: erstekategories.php ");
     exit();
 }
 ?>

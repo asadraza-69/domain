@@ -341,7 +341,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     });
                     // Wait for 2000 milliseconds (2 seconds) before redirecting
                     setTimeout(function() {
-                        window.location.href = "erstekategorie.php";
+                        window.location.href = "erstekategories.php";
                     }, 2000);
                 </script>';
             }

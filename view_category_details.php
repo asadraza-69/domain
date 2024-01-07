@@ -6,7 +6,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
     exit();
 }
 if (!isset($_GET['cat_pk'])) {
-    header("Location: erstekategorie.php ");
+    header("Location: erstekategories.php ");
     exit();
 }
 ?>

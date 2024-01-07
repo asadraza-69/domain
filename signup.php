@@ -2,7 +2,7 @@
 <?php require "navbar.php" ?>
 <?php
 if (isset($_SESSION['user']) && $_SESSION['user']['role'] == 'admin') {
-    header("Location: erstekategorie.php ");
+    header("Location: erstekategories.php ");
     exit();
 }
 if (isset($_SESSION['user']) && $_SESSION['user']['role'] == 'user') {
@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     });
                     // Wait for 2000 milliseconds (2 seconds) before redirecting
                     setTimeout(function() {
-                        window.location.href = "erstekategorie.php";
+                        window.location.href = "erstekategories.php";
                     }, 2000);
                 </script>';
             }
