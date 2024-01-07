@@ -9,7 +9,7 @@
 
         <div class="collapse navbar-collapse" id="navbar-ex-3">
             <div class="navbar-nav me-auto">
-                <!-- <a class="nav-item nav-link active" href="home.php">Home</a> -->
+                <!-- <a class="nav-item nav-link active" href="erstekategorie.php">Home</a> -->
                 <?php
                 if (isset($_SESSION['user']) && $_SESSION['user']['role'] == 'user') {
                     echo '<a class="nav-item nav-link active" href="javascript:void(0)">Home</a>';

@@ -7,5 +7,5 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.+?)/?$ $1.php [L]
 
-# Rewrite for home.php with additional parameter
-RewriteRule ^home/([^/]+)/?$ home.php?urlparams=$1 [L,QSA]
+# Rewrite for erstekategorie.php with additional parameter
+RewriteRule ^home/([^/]+)/?$ erstekategorie.php?urlparams=$1 [L,QSA]

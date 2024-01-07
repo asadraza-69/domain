@@ -2,7 +2,7 @@
 <?php require "navbar.php" ?>
 <?php
 if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
-    header("Location: home.php ");
+    header("Location: erstekategorie.php ");
     exit();
 }
 if (!isset($_GET['cat_pk'])) {

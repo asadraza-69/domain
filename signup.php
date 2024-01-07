@@ -6,7 +6,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['role'] == 'admin') {
     exit();
 }
 if (isset($_SESSION['user']) && $_SESSION['user']['role'] == 'user') {
-    header("Location: home.php ");
+    header("Location: erstekategorie.php ");
     exit();
 }
 ?>
