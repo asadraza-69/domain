@@ -62,7 +62,7 @@ if (!isset($_GET['cat_pk'])) {
                             <form action="" method="post">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="viewCategorymodalCenterTitle">Edit Category Question</h5>
+                                        <h5 class="modal-title" id="viewCategorymodalCenterTitle">Edit Question</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -79,6 +79,7 @@ if (!isset($_GET['cat_pk'])) {
                                                 <input name="correctAnswer" class="form-check-input" type="radio" value="answer1" id="defaultRadio1">
                                             </div>
                                             <div class="col-11 mb-3">
+                                                <input type="hidden" id="answerID1" name="answerID1" class="form-control" placeholder="Enter First answer Here" />
                                                 <input type="text" id="answer1" name="answer1" class="form-control" placeholder="Enter First answer Here" />
                                             </div>
                                         </div>
@@ -87,6 +88,7 @@ if (!isset($_GET['cat_pk'])) {
                                                 <input name="correctAnswer" class="form-check-input" type="radio" value="answer2" id="defaultRadio2">
                                             </div>
                                             <div class="col-11 mb-3">
+                                                <input type="hidden" id="answerID2" name="answerID2" class="form-control" placeholder="Enter First answer Here" />
                                                 <input type="text" id="answer2" name="answer2" class="form-control" placeholder="Enter Second answer Here" />
                                             </div>
                                         </div>
@@ -95,6 +97,7 @@ if (!isset($_GET['cat_pk'])) {
                                                 <input name="correctAnswer" class="form-check-input" type="radio" value="answer3" id="defaultRadio3">
                                             </div>
                                             <div class="col-11 mb-3">
+                                                <input type="hidden" id="answerID3" name="answerID3" class="form-control" placeholder="Enter First answer Here" />
                                                 <input type="text" id="answer3" name="answer3" class="form-control" placeholder="Enter Third answer Here" />
                                             </div>
                                         </div>
@@ -103,6 +106,7 @@ if (!isset($_GET['cat_pk'])) {
                                                 <input name="correctAnswer" class="form-check-input" type="radio" value="answer4" id="defaultRadio4">
                                             </div>
                                             <div class="col-11 mb-3">
+                                                <input type="hidden" id="answerID4" name="answerID4" class="form-control" placeholder="Enter First answer Here" />
                                                 <input type="text" id="answer4" name="answer4" class="form-control" placeholder="Enter Fourth answer Here" />
                                             </div>
                                         </div>
@@ -316,16 +320,16 @@ if (!isset($_GET['cat_pk'])) {
             }
             ?>
             var question_obj = <?php echo isset($question_obj) ? json_encode($question_obj) : 'null'; ?>;
-            console.log(question_obj);
+            // console.log(question_obj);
             var answer_qs = <?php echo isset($rows) ? json_encode($rows) : 'null'; ?>;
             var question__qs = <?php echo isset($rows21) ? json_encode($rows21) : 'null'; ?>;
-            console.log("qs");
-            console.log(question__qs);
+            // console.log("qs");
+            // console.log(question__qs);
 
 
             if (question__qs !== null) {
-                console.log("question__qs");
-                console.log(question__qs);
+                // console.log("question__qs");
+                // console.log(question__qs);
 
                 var trueQuestion = $('#trueQuestion');
                 trueQuestion.empty();
@@ -366,6 +370,9 @@ if (!isset($_GET['cat_pk'])) {
                     var answerObj = answer_qs[i];
                     var id = "#answer" + (i + 1);
                     $(id).val(answerObj['answer']);
+                    
+                    var pkid = "#answerID"+ (i + 1);
+                    $(pkid).val(answerObj['pk']);
 
 
                     if (answerObj['status'] == 1) {
@@ -527,18 +534,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $trueQuestion = $_POST['trueQuestion'];
         $description = $_POST['description'];
         $correctAnswer = $_POST['correctAnswer'];
-
-        $insertQuery = "INSERT INTO category_question
-        (question, category_id, description, true_child_question, false_child_question) 
-        VALUES ('$category_question','$category_pk','$description','$trueQuestion','$falseQuestion')";
+        
+        $insertQuery  = "UPDATE category_question SET question = '$category_question',
+            description = '$description',true_child_question = '$trueQuestion',false_child_question = '$falseQuestion'
+            WHERE pk = '$category_pk'";
+        
         $result = mysqli_query($conn, $insertQuery);
-        $pk = $result['pk'];
+        $pk = mysqli_insert_id($conn);
         $i = 1;
         while ($i < 5) {
             $key = 'answer' . $i;
+            $id = 'answerID' . $i;
+            $ans_pk = $_POST[$id];
             $answer_status = $correctAnswer == $key ? 1 : 0;
             $answer = $_POST[$key];
-            $insertAnswerQuery = "INSERT INTO answer(answer, question_id, status) VALUES ('$answer','$pk','$answer_status')";
+            $insertAnswerQuery = "UPDATE answer SET answer = '$answer',status = '$answer_status' WHERE pk = '$ans_pk';";
             mysqli_query($conn, $insertAnswerQuery);
             $i++;
         }
