@@ -111,37 +111,7 @@ if (!isset($_GET['cat_pk'])) {
                                             </div>
                                         </div>
 
-                                        <div class="row d-flex align-items-center">
-                                            <div class="col-6 mb-3">
-                                                <label for="falseQuestion" class="form-label">FALSE Child Question</label>
-                                                <select id="falseQuestion" name="falseQuestion" class="form-select">
-                                                    <option value="0">No Child Question</option>
-                                                    <?php //while ($row = mysqli_fetch_array($result)) {
-                                                    //echo ($row);
-                                                    ?>
-                                                    <!-- <option value="<?php // echo $row['pk']; 
-                                                                        ?>"><?php // echo $row['question']; 
-                                                                            ?></option> -->
-                                                    <?php
-                                                    //}
-                                                    ?>
-                                                </select>
-                                            </div>
-                                            <div class="col-6 mb-3">
-                                                <label for="trueQuestion" class="form-label">TRUE Child Question</label>
-                                                <select id="trueQuestion" name="trueQuestion" class="form-select">
-                                                    <option value="0">No Child Question</option>
-                                                    <?php //while ($row = mysqli_fetch_array($result2)) {
-                                                    ?>
-                                                    <option value="<?php //echo $row['pk']; 
-                                                                    ?>"><?php //echo $row['question']; 
-                                                                        ?></option>
-                                                    <?php
-                                                    //}
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
+                            
                                         <div class="row d-flex align-items-center">
                                             <label for="exampleFormControlTextarea1" class="form-label">Description</label>
                                             <textarea class="form-control" id="exampleFormControlTextarea1" name="description" rows="3"></textarea>
@@ -530,8 +500,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['addQuestion'])) {
         $category_pk = $_POST['view_category_pk'];
         $category_question = $_POST['category_question'];
-        $falseQuestion = $_POST['falseQuestion'];
-        $trueQuestion = $_POST['trueQuestion'];
+        $falseQuestion = 0;
+        $trueQuestion = 0;
         $description = $_POST['description'];
         $correctAnswer = $_POST['correctAnswer'];
         
