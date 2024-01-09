@@ -194,7 +194,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                         <th>Sno</th>
                                         <th><i class='bx bx-user'></i>UserList</th>
                                         <th><i class='bx bx-envelope'></i>Email</th>
-                                        <th><i class='bx bx-category'></i>Role</th>
+                                        <!-- <th><i class='bx bx-category'></i>Role</th> -->
                                         <th><i class='bx bx-detail'></i>Action</th>
                                     </tr>
                                 </thead>
@@ -220,10 +220,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                                 <!-- <i class="bx bxl-angular bx-sm text-danger me-3"></i> -->
                                                 <span class="fw-medium"><?php echo  ucwords($row['email']) ?></span>
                                             </td>
-                                            <td>
-                                                <!-- <i class="bx bxl-angular bx-sm text-danger me-3"></i> -->
-                                                <span class="fw-medium"><?php echo ucwords($row['role']) ?></span>
-                                            </td>
+                                           
                                             <td>
                                                 <div class="dropdown">
                                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
