@@ -49,7 +49,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                                         <input type="password" id="addPassword" name="password" class="form-control" placeholder="Enter User Password" required />
                                                     </div>
                                                 </div>
-                                                <div class="row">
+                                                <!-- <div class="row">
                                                     <div class="col mb-3">
                                                         <div class="mb-3">
                                                             <label for="addRole" class="form-label">Role</label>
@@ -59,7 +59,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                                             </select>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> -->
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
@@ -81,7 +81,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                             <form action="" method="post">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="modalCenterTitle">Edit Category</h5>
+                                        <h5 class="modal-title" id="modalCenterTitle">Edit User</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -104,7 +104,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                                 <input type="password" id="editPassword" name="password" class="form-control" placeholder="Enter User Password" required />
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <!-- <div class="row">
                                             <div class="col mb-3">
                                                 <div class="mb-3">
                                                     <label for="editRole" class="form-label">Role</label>
@@ -114,7 +114,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                                     </select>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
@@ -133,7 +133,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                             <form action="" method="post">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="modalCenterTitle">Delete Category</h5>
+                                        <h5 class="modal-title" id="modalCenterTitle">Delete User</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -156,7 +156,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                                 <input type="password" id="deletePassword" name="password" class="form-control" placeholder="Enter User Password" disabled />
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <!-- <div class="row">
                                             <div class="col mb-3">
                                                 <div class="mb-3">
                                                     <label for="deleteRole" class="form-label">Role</label>
@@ -166,7 +166,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                                     </select>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
@@ -266,7 +266,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
             $('#editpk').val(pk);
             $('#editFullname').val(name);
             $('#editEmail').val(email);
-            $('#editPassword').val(password);
+            // $('#editPassword').val(password);
             $('#editRole').val(role);
             
      
@@ -282,8 +282,8 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
             $('#deletepk').val(pk);
             $('#deleteFullname').val(name);
             $('#deleteEmail').val(email);
-            $('#deletePassword').val(password);
-            $('#deleteRole').val(role);
+            // $('#deletePassword').val(password);
+            // $('#deleteRole').val(role);
 
 
         });
@@ -296,7 +296,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    $role = mysqli_real_escape_string($conn, $_POST['role']);
+    $role = "admin";
 
     if (isset($_POST['addUser'])) {
         $query = "SELECT * FROM user WHERE email='$email'";

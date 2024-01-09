@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     setcookie('email', $email, time() + 30 * 24 * 3600, '/');
                     setcookie('password', $password, time() + 30 * 24 * 3600, '/');
                 }
-                $page_name = $_SESSION['user']['role'] == 'admin' ? 'erstekategorie' : 'home';
+                $page_name = $_SESSION['user']['role'] == 'admin' ? 'erstekategories' : 'home';
                 $successMessage = 'User Logged in Successfully';
                 echo '<script>
                     document.addEventListener("DOMContentLoaded", function() {

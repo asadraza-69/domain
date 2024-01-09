@@ -68,9 +68,9 @@ if (!isset($_GET['cat_pk'])) {
                                     <div class="modal-body">
                                         <div class="row">
                                             <div class="col mb-3">
-                                                <input type="hidden" name="view_category_pk" id="view_category_pk" />
+                                                <input type="hidden" name="view_category_pk" id="view_category_pk" required/>
                                                 <label for="nameWithTitle" class="form-label">Question</label>
-                                                <input type="text" id="category_question" name="category_question" class="form-control" placeholder="Enter Question Here" />
+                                                <input type="text" id="category_question" name="category_question" class="form-control" placeholder="Enter Question Here" required />
                                             </div>
                                         </div>
                                         <label for="nameWithTitle" class="form-label">Answers</label>
@@ -79,8 +79,8 @@ if (!isset($_GET['cat_pk'])) {
                                                 <input name="correctAnswer" class="form-check-input" type="radio" value="answer1" id="defaultRadio1">
                                             </div>
                                             <div class="col-11 mb-3">
-                                                <input type="hidden" id="answerID1" name="answerID1" class="form-control" placeholder="Enter First answer Here" />
-                                                <input type="text" id="answer1" name="answer1" class="form-control" placeholder="Enter First answer Here" />
+                                                <input type="hidden" id="answerID1" name="answerID1" class="form-control" placeholder="Enter First answer Here" required />
+                                                <input type="text" id="answer1" name="answer1" class="form-control" placeholder="Enter First answer Here" required />
                                             </div>
                                         </div>
                                         <div class="row d-flex align-items-center">
@@ -88,8 +88,8 @@ if (!isset($_GET['cat_pk'])) {
                                                 <input name="correctAnswer" class="form-check-input" type="radio" value="answer2" id="defaultRadio2">
                                             </div>
                                             <div class="col-11 mb-3">
-                                                <input type="hidden" id="answerID2" name="answerID2" class="form-control" placeholder="Enter First answer Here" />
-                                                <input type="text" id="answer2" name="answer2" class="form-control" placeholder="Enter Second answer Here" />
+                                                <input type="hidden" id="answerID2" name="answerID2" class="form-control" placeholder="Enter First answer Here" required />
+                                                <input type="text" id="answer2" name="answer2" class="form-control" placeholder="Enter Second answer Here" required />
                                             </div>
                                         </div>
                                         <div class="row d-flex align-items-center">
@@ -97,8 +97,8 @@ if (!isset($_GET['cat_pk'])) {
                                                 <input name="correctAnswer" class="form-check-input" type="radio" value="answer3" id="defaultRadio3">
                                             </div>
                                             <div class="col-11 mb-3">
-                                                <input type="hidden" id="answerID3" name="answerID3" class="form-control" placeholder="Enter First answer Here" />
-                                                <input type="text" id="answer3" name="answer3" class="form-control" placeholder="Enter Third answer Here" />
+                                                <input type="hidden" id="answerID3" name="answerID3" class="form-control" placeholder="Enter First answer Here" required />
+                                                <input type="text" id="answer3" name="answer3" class="form-control" placeholder="Enter Third answer Here" required />
                                             </div>
                                         </div>
                                         <div class="row d-flex align-items-center">
@@ -106,15 +106,15 @@ if (!isset($_GET['cat_pk'])) {
                                                 <input name="correctAnswer" class="form-check-input" type="radio" value="answer4" id="defaultRadio4">
                                             </div>
                                             <div class="col-11 mb-3">
-                                                <input type="hidden" id="answerID4" name="answerID4" class="form-control" placeholder="Enter First answer Here" />
-                                                <input type="text" id="answer4" name="answer4" class="form-control" placeholder="Enter Fourth answer Here" />
+                                                <input type="hidden" id="answerID4" name="answerID4" class="form-control" placeholder="Enter First answer Here" required />
+                                                <input type="text" id="answer4" name="answer4" class="form-control" placeholder="Enter Fourth answer Here" required />
                                             </div>
                                         </div>
 
                             
                                         <div class="row d-flex align-items-center">
                                             <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1" name="description" rows="3"></textarea>
+                                            <textarea class="form-control" id="exampleFormControlTextarea1" name="description" rows="3" required></textarea>
                                         </div>
 
                                     </div>

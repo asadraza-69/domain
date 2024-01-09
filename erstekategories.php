@@ -34,7 +34,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                                 <div class="row">
                                                     <div class="col mb-3">
                                                         <label for="nameWithTitle" class="form-label">Category Name</label>
-                                                        <input type="text" id="nameWithTitle" name="category_name" class="form-control" placeholder="Enter Category" />
+                                                        <input type="text" id="nameWithTitle" name="category_name" class="form-control" placeholder="Enter Category" required />
                                                     </div>
                                                 </div>
                                             </div>
@@ -65,8 +65,8 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                         <div class="row">
                                             <div class="col mb-3">
                                                 <label for="nameWithTitle" class="form-label">Category Name</label>
-                                                <input type="hidden" name="edit_category_pk" id="edit_category_pk" />
-                                                <input type="text" id="edit_category_name" name="edit_category_name" class="form-control" placeholder="Enter Category" />
+                                                <input type="hidden" name="edit_category_pk" id="edit_category_pk" required />
+                                                <input type="text" id="edit_category_name" name="edit_category_name" class="form-control" placeholder="Enter Category" required />
                                             </div>
                                         </div>
                                     </div>
@@ -95,7 +95,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                             <div class="col mb-3">
                                                 <input type="hidden" name="view_category_pk" id="view_category_pk" />
                                                 <label for="nameWithTitle" class="form-label">Question</label>
-                                                <input type="text" id="category_question" name="category_question" class="form-control" placeholder="Enter Question Here" />
+                                                <input type="text" id="category_question" name="category_question" class="form-control" placeholder="Enter Question Here" required />
                                             </div>
                                         </div>
                                         <label for="nameWithTitle" class="form-label">Answers</label>
@@ -104,7 +104,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                                 <input name="correctAnswer" class="form-check-input" type="radio" value="answer1" id="defaultRadio1" checked>
                                             </div>
                                             <div class="col-11 mb-3">
-                                                <input type="text" id="answer1" name="answer1" class="form-control" placeholder="Enter First answer Here" />
+                                                <input type="text" id="answer1" name="answer1" class="form-control" placeholder="Enter First answer Here" required />
                                             </div>
                                         </div>
                                         <div class="row d-flex align-items-center">
@@ -112,7 +112,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                                 <input name="correctAnswer" class="form-check-input" type="radio" value="answer2" id="defaultRadio2">
                                             </div>
                                             <div class="col-11 mb-3">
-                                                <input type="text" id="answer2" name="answer2" class="form-control" placeholder="Enter Second answer Here" />
+                                                <input type="text" id="answer2" name="answer2" class="form-control" placeholder="Enter Second answer Here" required />
                                             </div>
                                         </div>
                                         <div class="row d-flex align-items-center">
@@ -120,7 +120,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                                 <input name="correctAnswer" class="form-check-input" type="radio" value="answer3" id="defaultRadio3">
                                             </div>
                                             <div class="col-11 mb-3">
-                                                <input type="text" id="answer3" name="answer3" class="form-control" placeholder="Enter Third answer Here" />
+                                                <input type="text" id="answer3" name="answer3" class="form-control" placeholder="Enter Third answer Here" required />
                                             </div>
                                         </div>
                                         <div class="row d-flex align-items-center">
@@ -128,12 +128,12 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                                 <input name="correctAnswer" class="form-check-input" type="radio" value="answer4" id="defaultRadio4">
                                             </div>
                                             <div class="col-11 mb-3">
-                                                <input type="text" id="answer4" name="answer4" class="form-control" placeholder="Enter Fourth answer Here" />
+                                                <input type="text" id="answer4" name="answer4" class="form-control" placeholder="Enter Fourth answer Here" required />
                                             </div>
                                         </div>
                                         <div class="row d-flex align-items-center">
                                             <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1" name="description" rows="3"></textarea>
+                                            <textarea class="form-control" id="exampleFormControlTextarea1" name="description" rows="3" required></textarea>
                                         </div>
 
                                     </div>
@@ -160,9 +160,9 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                     <div class="modal-body">
                                         <div class="row">
                                             <div class="col mb-3">
-                                                <label for="nameWithTitle" class="form-label">Category Name</label>
+                                                <label for="nameWithTitle" class="form-label"></label>
                                                 <input type="hidden" name="delete_category_pk" id="delete_category_pk" />
-                                                <input type="text" id="delete_category_name" name="delete_category_name" class="form-control" placeholder="Enter Category" disabled />
+                                                <label for="" id="delete_category_name" class="form-label"></label>
                                             </div>
                                         </div>
                                     </div>
@@ -191,6 +191,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                     <tr>
                                         <th>Sno</th>
                                         <th><i class='bx bx-category'></i>Catergory List</th>
+                                        <th><i class='bx bx-detail'></i>Visibility</th>
                                         <th><i class='bx bx-detail'></i>Action</th>
                                     </tr>
                                 </thead>
@@ -213,13 +214,27 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                                 <span class="fw-medium"><?php echo $row['name'] ?></span>
                                             </td>
                                             <td>
+                                                <?php
+                                                if ($row['visible'] == 1) {
+                                                    echo '<button data-pk="' . $row['pk'] . '" data-toggle="0" class="dropdown-item toggle-btn"><i class="bx bx-low-vision"></i>Hide</button>';
+                                                } else {
+                                                    echo '<button data-pk="' . $row['pk'] . '" data-toggle="1" class="dropdown-item toggle-btn"><i class="bx bx-show"></i>Show</button>';
+                                                }
+
+                                                ?>
+                                            </td>
+                                            <td>
                                                 <div class="dropdown">
                                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>
                                                     </button>
                                                     <div class="dropdown-menu">
                                                         <button data-pk="<?php echo $row['pk']; ?>" data-name="<?php echo $row['name']; ?>" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editCategoryModal"><i class="bx bx-edit-alt me-1"></i> Edit</button>
-                                                        <button data-pk="<?php echo $row['pk']; ?>" data-name="<?php echo $row['name']; ?>" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal"><i class="bx bx-trash me-1"></i> Delete</button>
+                                                        <?php
+                                                        if ($row['visible'] == 0) {
+                                                            echo '<button data-pk="' . $row['pk'] . '" data-name="' . $row['name'] . '" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal"><i class="bx bx-trash me-1"></i> Delete</button>';
+                                                        }
+                                                        ?>
                                                         <button data-pk="<?php echo $row['pk']; ?>" data-name="<?php echo $row['name']; ?>" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addCategoryQuestionModal"><i class='bx bx-question-mark'></i> Add Category Question</button>
                                                         <a class="dropdown-item" href="view_category_details.php?cat_pk=<?php echo $row['pk']; ?>"><i class='bx bxs-detail'></i>View Question</a>
                                                     </div>
@@ -245,13 +260,145 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
 <script>
     $(document).ready(function() {
         console.log("Ready");
+
+        // $('.toggle-btn').click(function() {
+        //     var pk = $(this).data('pk');
+        //     var toggleValue = $(this).data('toggle');
+        //     var currentUrl = new URL(window.location.href);
+
+        //     if (currentUrl.searchParams.has('pk')) {
+        //         currentUrl.searchParams.set('pk', pk);
+        //     } else {
+        //         currentUrl.searchParams.append('pk', pk);
+        //     }
+        //     if (currentUrl.searchParams.has('toggleValue')) {
+        //         currentUrl.searchParams.set('toggleValue', toggleValue);
+        //     } else {
+        //         currentUrl.searchParams.append('toggleValue', toggleValue);
+        //     }
+
+        //     window.history.replaceState({}, document.title, currentUrl.toString());
+        //     console.log(pk ,pk);
+        //     console.log(toggleValue);
+
+        //     <?php
+                //     $pk = isset($_GET["pk"]) ? $_GET["pk"] : null;
+                //     $toggleValue = isset($_GET["toggleValue"]) ? $_GET["toggleValue"] : 0;
+                //     echo 'console.log(pk'.$pk.');';
+                //     echo 'console.log('.$toggleValue.');';
+                //     if ($toggleValue && $pk) {
+                //         $query = "Update category SET visible = '$toggleValue 'WHERE pk = '$pk'";
+                //         if (mysqli_query($conn, $query)) {
+                //             $successMessage = 'Visibility Updated Successfully';
+                //             echo '
+                //             console.log("aaaaaaaaaaaaa");
+                //             var htmlContent = \'<div class="alert alert-success alert-dismissible" role="alert">\' 
+                //                         + \'' . $successMessage . '\' 
+                //                         + \'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>\';
+                //                     $("#authenti-inner").append(htmlContent);
+
+                //                     // Wait for 2000 milliseconds (2 seconds) before redirecting
+                //                     setTimeout(function() {
+                //                         window.location.href = "erstekategories.php";
+                //                     }, 2000);';
+                //         } else {
+                //             $successMessage = 'Unexpected Error Occurred';
+                //             echo '
+                //             console.log("nbbbbbbaaaaaaaaaaaa");
+                //             var htmlContent = \'<div class="alert alert-danger alert-dismissible" role="alert">\' 
+                //                         + \'' . $successMessage . '\' 
+                //                         + \'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>\';
+                //                     $("#authenti-inner").append(htmlContent);
+
+                //                     // Wait for 2000 milliseconds (2 seconds) before redirecting
+                //                     setTimeout(function() {
+                //                         window.location.href = "erstekategories.php";
+                //                     }, 2000);';
+                //         }
+                //     }
+                //     
+                ?>
+
+
+
+
+        // });
+        // $('.toggle-btn').click(function() {
+        //     // Get the values of data-pk and data-toggle attributes
+        //     var pk = $(this).data('pk');
+        //     var toggleValue = $(this).data('toggle');
+
+        //     // Perform your logic based on pk and toggleValue
+        //     if (toggleValue == 0) {
+        //         // Your logic when data-toggle is 'some_value'
+        //         alert('Hide button clicked with data-pk: ' + pk);
+        //     } else {
+        //         // Your logic when data-toggle is 'some_other_value'
+        //         alert('Show button clicked with data-pk: ' + pk);
+        //     }
+        // });
+        $('.toggle-btn').click(function() {
+            var pk = $(this).data('pk');
+            var toggleValue = $(this).data('toggle');
+            var currentUrl = new URL(window.location.href);
+
+            if (currentUrl.searchParams.has('pk')) {
+                currentUrl.searchParams.set('pk', pk);
+            } else {
+                currentUrl.searchParams.append('pk', pk);
+            }
+            if (currentUrl.searchParams.has('toggleValue')) {
+                currentUrl.searchParams.set('toggleValue', toggleValue);
+            } else {
+                currentUrl.searchParams.append('toggleValue', toggleValue);
+            }
+
+            window.history.replaceState({}, document.title, currentUrl.toString());
+
+            <?php
+            $pk = isset($_GET["pk"]) ? $_GET["pk"] : null;
+            $toggleValue = isset($_GET["toggleValue"]) ? $_GET["toggleValue"] : 0;
+
+            echo 'var pk = ' . json_encode($pk) . ';';
+            echo 'var toggleValue = ' . json_encode($toggleValue) . ';';
+
+            echo 'if (toggleValue && pk) {';
+            echo '  var query = "Update category SET visible = " + toggleValue + " WHERE pk = " + pk;';
+            echo '  $.ajax({';
+            echo '    url: "changeStatus.php",';
+            echo '    type: "POST",';
+            echo '    data: { query: query },';
+            echo '    success: function(response) {';
+            echo '      console.log(response);';
+            echo '      var htmlContent = \'<div class="alert alert-success alert-dismissible" role="alert">\' +';
+            echo '        "Visibility Updated Successfully" +';
+            echo '        \'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>\';';
+            echo '      $("#authenti-inner").append(htmlContent);';
+            echo '        setTimeout(function() {';
+            echo '          location.reload();'; // Reload the page
+            echo '        }, 2000);';
+            echo '    },';
+            echo '    error: function(error) {';
+            echo '      console.log(error);';
+            echo '      var htmlContent = \'<div class="alert alert-danger alert-dismissible" role="alert">\' +';
+            echo '        "Unexpected Error Occurred" +';
+            echo '        \'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>\';';
+            echo '      $("#authenti-inner").append(htmlContent);';
+            echo '      setTimeout(function() {';
+            echo '      location.reload();'; // Reload the page
+            echo '      }, 2000);';
+            echo '    }';
+            echo '  });';
+            echo '}';
+            ?>
+        });
         $('#editCategoryModal').on('show.bs.modal', function(event) {
             console.log("Edit Category Clicked");
             var button = $(event.relatedTarget);
             var pk = button.data('pk');
             var name = button.data('name');
-            $('#edit_category_pk').val(pk); // Assuming 'pk' is a key in your fetched data
-            $('#edit_category_name').val(name); // Assuming 'pk' is a key in your fetched data
+            $('#edit_category_pk').val(pk);
+            $('#edit_category_name').val(name);
 
         });
         $('#deleteCategoryModal').on('show.bs.modal', function(event) {
@@ -259,8 +406,9 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
             var button = $(event.relatedTarget);
             var pk = button.data('pk');
             var name = button.data('name');
-            $('#delete_category_pk').val(pk); // Assuming 'pk' is a key in your fetched data
-            $('#delete_category_name').val(name); // Assuming 'pk' is a key in your fetched data
+            $('#delete_category_pk').val(pk);
+            $('#delete_category_name').text("Are you sure you want to delete '"+name+"' category");
+            
 
         });
         $('#closeButton').click(function() {
@@ -307,7 +455,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                 var falseQuestion = $('#falseQuestion');
                 falseQuestion.empty();
                 falseQuestion.append('<option value="0">No Child Question</option>');
-                
+
                 question__qs.forEach(function(question) {
                     var option = $('<option value="' + question.pk + '">' + question.question + '</option>');
                     falseQuestion.append(option);
@@ -323,7 +471,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                 });
                 var name = button.data('name');
                 $('#viewCategorymodalCenterTitle').text('Add Question to "' + name + '" Category Question Title');
-                $('#view_category_pk').val(pk); // Assuming 'pk' is a key in your fetched data
+                $('#view_category_pk').val(pk);
 
             }
         });
