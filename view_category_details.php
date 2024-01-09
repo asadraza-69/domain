@@ -181,6 +181,7 @@ if (!isset($_GET['cat_pk'])) {
                                         <th><i class='bx bx-category'></i>Answer 02</th>
                                         <th><i class='bx bx-category'></i>Answer 03</th>
                                         <th><i class='bx bx-category'></i>Answer 04</th>
+                                        <th><i class='bx bx-detail'></i>Visibility</th>
                                         <th><i class='bx bx-detail'></i>Action</th>
                                     </tr>
                                 </thead>
@@ -216,13 +217,28 @@ if (!isset($_GET['cat_pk'])) {
                                             }
                                             ?>
                                             <td>
+                                                <?php
+                                                if ($row['visible'] == 1) {
+                                                    echo '<button data-pk="' . $row['pk'] . '" data-toggle="0" class="dropdown-item toggle-btn"><i class="bx bx-low-vision"></i>Hide</button>';
+                                                } else {
+                                                    echo '<button data-pk="' . $row['pk'] . '" data-toggle="1" class="dropdown-item toggle-btn"><i class="bx bx-show"></i>Show</button>';
+                                                }
+
+                                                ?>
+                                            </td>
+                                            <td>
                                                 <div class="dropdown">
                                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>
                                                     </button>
                                                     <div class="dropdown-menu">
                                                         <button data-pk="<?php echo $row['pk']; ?>" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editQuestionModal"><i class="bx bx-edit-alt me-1"></i> Edit</button>
-                                                        <button data-pk="<?php echo $row['pk']; ?>" data-name="<?php echo $row['question']; ?>" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteQuestionModal"><i class="bx bx-trash me-1"></i> Delete</button>
+                                                        <?php
+                                                        if ($row['visible'] == 0) {
+                                                            // echo '<button data-pk="' . $row['pk'] . '" data-name="' . $row['name'] . '" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal"><i class="bx bx-trash me-1"></i> Delete</button>';
+                                                            echo '<button data-pk="'. $row['pk'].'" data-name="'.$row['question'].'" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteQuestionModal"><i class="bx bx-trash me-1"></i> Delete</button>';
+                                                        }
+                                                        ?>
                                                     </div>
                                                 </div>
                                             </td>
@@ -246,6 +262,61 @@ if (!isset($_GET['cat_pk'])) {
 <script>
     $(document).ready(function() {
         console.log("Ready");
+          $('.toggle-btn').click(function() {
+            var pk = $(this).data('pk');
+            var toggleValue = $(this).data('toggle');
+            var currentUrl = new URL(window.location.href);
+
+            if (currentUrl.searchParams.has('pk')) {
+                currentUrl.searchParams.set('pk', pk);
+            } else {
+                currentUrl.searchParams.append('pk', pk);
+            }
+            if (currentUrl.searchParams.has('toggleValue')) {
+                currentUrl.searchParams.set('toggleValue', toggleValue);
+            } else {
+                currentUrl.searchParams.append('toggleValue', toggleValue);
+            }
+
+            window.history.replaceState({}, document.title, currentUrl.toString());
+
+            <?php
+            $pk = isset($_GET["pk"]) ? $_GET["pk"] : null;
+            $toggleValue = isset($_GET["toggleValue"]) ? $_GET["toggleValue"] : 0;
+
+            echo 'var pk = ' . json_encode($pk) . ';';
+            echo 'var toggleValue = ' . json_encode($toggleValue) . ';';
+
+            echo 'if (toggleValue && pk) {';
+            echo '  var query = "Update category_question SET visible = " + toggleValue + " WHERE pk = " + pk;';
+            echo '  $.ajax({';
+            echo '    url: "changeStatus.php",';
+            echo '    type: "POST",';
+            echo '    data: { query: query },';
+            echo '    success: function(response) {';
+            echo '      console.log(response);';
+            echo '      var htmlContent = \'<div class="alert alert-success alert-dismissible" role="alert">\' +';
+            echo '        "Visibility Updated Successfully" +';
+            echo '        \'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>\';';
+            echo '      $("#authenti-inner").append(htmlContent);';
+            echo '        setTimeout(function() {';
+            echo '          location.reload();'; // Reload the page
+            echo '        }, 2000);';
+            echo '    },';
+            echo '    error: function(error) {';
+            echo '      console.log(error);';
+            echo '      var htmlContent = \'<div class="alert alert-danger alert-dismissible" role="alert">\' +';
+            echo '        "Unexpected Error Occurred" +';
+            echo '        \'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>\';';
+            echo '      $("#authenti-inner").append(htmlContent);';
+            echo '      setTimeout(function() {';
+            echo '      location.reload();'; // Reload the page
+            echo '      }, 2000);';
+            echo '    }';
+            echo '  });';
+            echo '}';
+            ?>
+        });
         $('#deleteQuestionModal').on('show.bs.modal', function(event) {
             console.log("Delete Question Clicked");
             var button = $(event.relatedTarget);
