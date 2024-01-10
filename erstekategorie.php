@@ -156,23 +156,8 @@ require "connection.php";
                             $index++;
                         }
                     } else {
-                        $randomQuestionObj = "No Question Found";
-                        echo "$('#categoryQuestion').text('" . $randomQuestionObj . "').css('text-transform', 'uppercase');";
-                        // $index = 1;
-                        // while ($index <= 4) {
-                        //     $id = "#answer" . $index;
-                        //     echo "$('" . $id . "').text('" . strtoupper("Option Doesnt Exist") . "');";
-
-                        //     // Fix: Wrap the desiredRadioId in quotes
-                        //     $desiredRadioId = 'answerradio' . $index;
-                        //     echo "var desiredRadioId = '" . $desiredRadioId . "';";
-                        //     echo "if (" . 0 . " == 1) {";
-                        //     echo "    $('#' + desiredRadioId).prop('value', 1);";
-                        //     echo "} else {";
-                        //     echo "    $('#' + desiredRadioId).prop('value', 0);";
-                        //     echo "}";
-                        //     $index++;
-                        // }
+                        $randomQuestionObjQs = "No Question Found";
+                        echo "$('#categoryQuestion').text('" . $randomQuestionObjQs . "').css('text-transform', 'uppercase');";
                         echo "$('#jokerBtnDiv').css('display', 'none');";
                         echo "$('#joker1').attr('style', 'display: none !important');";
                         echo "$('#joker2').attr('style', 'display: none !important');";
@@ -181,27 +166,9 @@ require "connection.php";
                         echo "$('input[name=\'correctAnswer\']').hide();";
                     }
                 } else {
-                    $randomQuestionObj = "No Question Found";
-                    echo "$('#categoryQuestion').text('" . $randomQuestionObj . "').css('text-transform', 'uppercase');";
+                    $randomQuestionObjQs = "No Question Found";
+                    echo "$('#categoryQuestion').text('" . $randomQuestionObjQs . "').css('text-transform', 'uppercase');";
                     echo  "$('.jokerBtnDiv').prop('disabled', true);";
-
-                    // $index = 1;
-                    // while ($index <= 4) {
-                    //     $id = "#answer" . $index;
-                    //     echo "$('" . $id . "').text('" . strtoupper("Answer is not avaliable") . "');";
-
-                    //     // Fix: Wrap the desiredRadioId in quotes
-                    //     $desiredRadioId = 'answerradio' . $index;
-                    //     echo "var desiredRadioId = '" . $desiredRadioId . "';";
-                    //     echo "if (" . 0 . " == 1) {";
-                    //     echo "    $('#' + desiredRadioId).prop('value', 1);";
-                    //     echo "} else {";
-                    //     echo "    $('#' + desiredRadioId).prop('value', 0);";
-                    //     echo "}";
-                    //     $index++;
-                    // }
-
-
                     echo "$('#jokerBtnDiv').css('display', 'none');";
                     echo "$('#joker1').attr('style', 'display: none !important');";
                     echo "$('#joker2').attr('style', 'display: none !important');";
@@ -210,36 +177,18 @@ require "connection.php";
                     echo "$('input[name=\'correctAnswer\']').hide();";
                 }
             } else {
-                $category_obj = "Category Doesn\'t Exist";
-                echo "$('#categoryTitleHead').text('" . $category_obj . "').css('text-transform', 'uppercase');";
+                
+                $category_obj_qs = "Category Doesn\'t Exist";
+                echo "$('#categoryTitleHead').text('" . $category_obj_qs . "').css('text-transform', 'uppercase');";
 
-                $randomQuestionObj = "No Question Found";
-                echo "$('#categoryQuestion').text('" . $randomQuestionObj . "').css('text-transform', 'uppercase');";
-
-                // $index = 1;
-                // while ($index <= 4) {
-                //     $id = "#answer" . $index;
-                //     echo "$('" . $id . "').text('" . strtoupper("Answer is not avaliable") . "');";
-
-                //     // Fix: Wrap the desiredRadioId in quotes
-                //     $desiredRadioId = 'answerradio' . $index;
-                //     echo "var desiredRadioId = '" . $desiredRadioId . "';";
-                //     echo "if (" . 0 . " == 1) {";
-                //     echo "    $('#' + desiredRadioId).prop('value', 1);";
-                //     echo "} else {";
-                //     echo "    $('#' + desiredRadioId).prop('value', 0);";
-                //     echo "}";
-                //     $index++;
-                // }
+                $randomQuestionObjQs = "No Question Found";
+                echo "$('#categoryQuestion').text('" . $randomQuestionObjQs . "').css('text-transform', 'uppercase');";
 
                 echo "$('.jokerBtnDiv').attr('style', 'display: none !important');";
                 echo "$('#joker1').attr('style', 'display: none !important');";
                 echo "$('#joker2').attr('style', 'display: none !important');";
                 echo "$('#joker3').attr('style', 'display: none !important');";
-
                 echo "$('input[name=\'correctAnswer\']').hide();";
-                // echo  "$('.jokerBtnDiv').prop('disabled', true);";
-                // echo "$('input[name=\'correctAnswer\']').prop('disabled', true);";
             }
             ?>
 
@@ -267,42 +216,40 @@ require "connection.php";
 
             $('input[name="correctAnswer"]').on('click', function() {
                 // Disable all radio buttons
-                $('input[name="correctAnswer"]').prop('disabled', true);
+                // $('input[name="correctAnswer"]').prop('disabled', true);
 
                 // Enable only the clicked radio button
-                $(this).prop('disabled', false);
+                // $(this).prop('disabled', false);
 
                 // Get the value of the clicked radio button
-                var selectedValue = $(this).val();
+                $('.jokerBtnDiv').attr('style', 'display: none !important');
+                $('#joker1').attr('style', 'display: none !important');
+                $('#joker2').attr('style', 'display: none !important');
+                $('#joker3').attr('style', 'display: none !important');
+                $('input[name=\'correctAnswer\']').hide();
 
+                var selectedValue = $(this).val();
                 // Display an alert based on the selected value
                 if (selectedValue == 0) {
                     var htmlContent = '<div class="alert alert-danger alert-dismissible" role="alert">' +
                         'Incorrect answer' +
                         '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
-                    $('#authenti-inner').append(htmlContent);
+                    // $('#authenti-inner').append(htmlContent);
                 } else {
                     var htmlContent = '<div class="alert alert-success alert-dismissible" role="alert">' +
                         'Correct answer' +
                         '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
-                    $('#authenti-inner').append(htmlContent);
+                    // $('#authenti-inner').append(htmlContent);
                 }
-                // Get the h5 element with id categoryQuestion
-                var categoryQuestionElement = $('#categoryQuestion');
 
-                // Get the text content of the h5 element
-                var categoryQuestionText = categoryQuestionElement.text();
+                let jsonString = JSON.stringify({
+                    category_name: $('#categoryTitleHead').text(),
+                    htmlContent: htmlContent,
+                    description: "<?php echo $randomQuestionObj['description']; ?>",
+                });
 
-                // Create a new p element
-                var newParagraphElement = $('<p>');
-
-                // Set the text content of the new p element
-                newParagraphElement.text(<?php
-                                            echo json_encode(isset($randomQuestionObj['description']) ? $randomQuestionObj['description'] : null);
-                                            ?>);
-
-                // Replace the h5 element with the new p element
-                categoryQuestionElement.replaceWith(newParagraphElement);
+                sessionStorage.setItem('data', jsonString);
+                window.location.href = "../response.php";
 
             });
         });
