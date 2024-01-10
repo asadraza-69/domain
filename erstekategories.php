@@ -141,7 +141,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="closeButton">
                                             Close
                                         </button>
-                                        <button type="submit" class="btn btn-primary" name="addQuestion">Update Question</button>
+                                        <button type="submit" class="btn btn-primary" name="addQuestion">Add Question</button>
                                     </div>
                                 </div>
                             </form>
@@ -261,136 +261,39 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
     $(document).ready(function() {
         console.log("Ready");
 
-        // $('.toggle-btn').click(function() {
-        //     var pk = $(this).data('pk');
-        //     var toggleValue = $(this).data('toggle');
-        //     var currentUrl = new URL(window.location.href);
-
-        //     if (currentUrl.searchParams.has('pk')) {
-        //         currentUrl.searchParams.set('pk', pk);
-        //     } else {
-        //         currentUrl.searchParams.append('pk', pk);
-        //     }
-        //     if (currentUrl.searchParams.has('toggleValue')) {
-        //         currentUrl.searchParams.set('toggleValue', toggleValue);
-        //     } else {
-        //         currentUrl.searchParams.append('toggleValue', toggleValue);
-        //     }
-
-        //     window.history.replaceState({}, document.title, currentUrl.toString());
-        //     console.log(pk ,pk);
-        //     console.log(toggleValue);
-
-        //     <?php
-                //     $pk = isset($_GET["pk"]) ? $_GET["pk"] : null;
-                //     $toggleValue = isset($_GET["toggleValue"]) ? $_GET["toggleValue"] : 0;
-                //     echo 'console.log(pk'.$pk.');';
-                //     echo 'console.log('.$toggleValue.');';
-                //     if ($toggleValue && $pk) {
-                //         $query = "Update category SET visible = '$toggleValue 'WHERE pk = '$pk'";
-                //         if (mysqli_query($conn, $query)) {
-                //             $successMessage = 'Visibility Updated Successfully';
-                //             echo '
-                //             console.log("aaaaaaaaaaaaa");
-                //             var htmlContent = \'<div class="alert alert-success alert-dismissible" role="alert">\' 
-                //                         + \'' . $successMessage . '\' 
-                //                         + \'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>\';
-                //                     $("#authenti-inner").append(htmlContent);
-
-                //                     // Wait for 2000 milliseconds (2 seconds) before redirecting
-                //                     setTimeout(function() {
-                //                         window.location.href = "erstekategories.php";
-                //                     }, 2000);';
-                //         } else {
-                //             $successMessage = 'Unexpected Error Occurred';
-                //             echo '
-                //             console.log("nbbbbbbaaaaaaaaaaaa");
-                //             var htmlContent = \'<div class="alert alert-danger alert-dismissible" role="alert">\' 
-                //                         + \'' . $successMessage . '\' 
-                //                         + \'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>\';
-                //                     $("#authenti-inner").append(htmlContent);
-
-                //                     // Wait for 2000 milliseconds (2 seconds) before redirecting
-                //                     setTimeout(function() {
-                //                         window.location.href = "erstekategories.php";
-                //                     }, 2000);';
-                //         }
-                //     }
-                //     
-                ?>
-
-
-
-
-        // });
-        // $('.toggle-btn').click(function() {
-        //     // Get the values of data-pk and data-toggle attributes
-        //     var pk = $(this).data('pk');
-        //     var toggleValue = $(this).data('toggle');
-
-        //     // Perform your logic based on pk and toggleValue
-        //     if (toggleValue == 0) {
-        //         // Your logic when data-toggle is 'some_value'
-        //         alert('Hide button clicked with data-pk: ' + pk);
-        //     } else {
-        //         // Your logic when data-toggle is 'some_other_value'
-        //         alert('Show button clicked with data-pk: ' + pk);
-        //     }
-        // });
         $('.toggle-btn').click(function() {
             var pk = $(this).data('pk');
             var toggleValue = $(this).data('toggle');
-            var currentUrl = new URL(window.location.href);
+            var query = "Update category SET visible = " + toggleValue + " WHERE pk = " + pk;
+            $.ajax({
+                url: "changeStatus.php",
+                type: "POST",
+                data: {
+                    query: query
+                },
+                success: function(response) {
+                    console.log(response);
+                    var htmlContent = '<div class="alert alert-success alert-dismissible" role="alert">' +
+                        'Visibility Updated Successfully' +
+                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
 
-            if (currentUrl.searchParams.has('pk')) {
-                currentUrl.searchParams.set('pk', pk);
-            } else {
-                currentUrl.searchParams.append('pk', pk);
-            }
-            if (currentUrl.searchParams.has('toggleValue')) {
-                currentUrl.searchParams.set('toggleValue', toggleValue);
-            } else {
-                currentUrl.searchParams.append('toggleValue', toggleValue);
-            }
+                    $("#authenti-inner").append(htmlContent);
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+                },
+                error: function(error) {
+                    console.log(error);
+                    var htmlContent = '<div class="alert alert-danger alert-dismissible" role="alert">Unexpected Error Occurred' +
+                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
 
-            window.history.replaceState({}, document.title, currentUrl.toString());
+                    $("#authenti-inner").append(htmlContent);
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+                }
+            });
 
-            <?php
-            $pk = isset($_GET["pk"]) ? $_GET["pk"] : null;
-            $toggleValue = isset($_GET["toggleValue"]) ? $_GET["toggleValue"] : 0;
-
-            echo 'var pk = ' . json_encode($pk) . ';';
-            echo 'var toggleValue = ' . json_encode($toggleValue) . ';';
-
-            echo 'if (toggleValue && pk) {';
-            echo '  var query = "Update category SET visible = " + toggleValue + " WHERE pk = " + pk;';
-            echo '  $.ajax({';
-            echo '    url: "changeStatus.php",';
-            echo '    type: "POST",';
-            echo '    data: { query: query },';
-            echo '    success: function(response) {';
-            echo '      console.log(response);';
-            echo '      var htmlContent = \'<div class="alert alert-success alert-dismissible" role="alert">\' +';
-            echo '        "Visibility Updated Successfully" +';
-            echo '        \'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>\';';
-            echo '      $("#authenti-inner").append(htmlContent);';
-            echo '        setTimeout(function() {';
-            echo '          location.reload();'; // Reload the page
-            echo '        }, 2000);';
-            echo '    },';
-            echo '    error: function(error) {';
-            echo '      console.log(error);';
-            echo '      var htmlContent = \'<div class="alert alert-danger alert-dismissible" role="alert">\' +';
-            echo '        "Unexpected Error Occurred" +';
-            echo '        \'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>\';';
-            echo '      $("#authenti-inner").append(htmlContent);';
-            echo '      setTimeout(function() {';
-            echo '      location.reload();'; // Reload the page
-            echo '      }, 2000);';
-            echo '    }';
-            echo '  });';
-            echo '}';
-            ?>
         });
         $('#editCategoryModal').on('show.bs.modal', function(event) {
             console.log("Edit Category Clicked");
@@ -407,8 +310,8 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
             var pk = button.data('pk');
             var name = button.data('name');
             $('#delete_category_pk').val(pk);
-            $('#delete_category_name').text("Are you sure you want to delete '"+name+"' category");
-            
+            $('#delete_category_name').text("Are you sure you want to delete '" + name + "' category");
+
 
         });
         $('#closeButton').click(function() {
@@ -425,7 +328,11 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
             console.log("Add Question Btn added");
             var button = $(event.relatedTarget);
             var pk = button.data('pk');
+            $('#view_category_pk').val(pk);
+            
+            
             createCookie("pk", pk, "1");
+
             var currentUrl = new URL(window.location.href);
 
             // Check if the URL already contains a question_id parameter

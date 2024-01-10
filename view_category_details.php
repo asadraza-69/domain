@@ -68,7 +68,7 @@ if (!isset($_GET['cat_pk'])) {
                                     <div class="modal-body">
                                         <div class="row">
                                             <div class="col mb-3">
-                                                <input type="hidden" name="view_category_pk" id="view_category_pk" required/>
+                                                <input type="hidden" name="view_category_pk" id="view_category_pk" required />
                                                 <label for="nameWithTitle" class="form-label">Question</label>
                                                 <input type="text" id="category_question" name="category_question" class="form-control" placeholder="Enter Question Here" required />
                                             </div>
@@ -111,7 +111,7 @@ if (!isset($_GET['cat_pk'])) {
                                             </div>
                                         </div>
 
-                            
+
                                         <div class="row d-flex align-items-center">
                                             <label for="exampleFormControlTextarea1" class="form-label">Description</label>
                                             <textarea class="form-control" id="exampleFormControlTextarea1" name="description" rows="3" required></textarea>
@@ -236,7 +236,7 @@ if (!isset($_GET['cat_pk'])) {
                                                         <?php
                                                         if ($row['visible'] == 0) {
                                                             // echo '<button data-pk="' . $row['pk'] . '" data-name="' . $row['name'] . '" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal"><i class="bx bx-trash me-1"></i> Delete</button>';
-                                                            echo '<button data-pk="'. $row['pk'].'" data-name="'.$row['question'].'" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteQuestionModal"><i class="bx bx-trash me-1"></i> Delete</button>';
+                                                            echo '<button data-pk="' . $row['pk'] . '" data-name="' . $row['question'] . '" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteQuestionModal"><i class="bx bx-trash me-1"></i> Delete</button>';
                                                         }
                                                         ?>
                                                     </div>
@@ -262,60 +262,40 @@ if (!isset($_GET['cat_pk'])) {
 <script>
     $(document).ready(function() {
         console.log("Ready");
-          $('.toggle-btn').click(function() {
+        $('.toggle-btn').click(function() {
             var pk = $(this).data('pk');
             var toggleValue = $(this).data('toggle');
-            var currentUrl = new URL(window.location.href);
 
-            if (currentUrl.searchParams.has('pk')) {
-                currentUrl.searchParams.set('pk', pk);
-            } else {
-                currentUrl.searchParams.append('pk', pk);
-            }
-            if (currentUrl.searchParams.has('toggleValue')) {
-                currentUrl.searchParams.set('toggleValue', toggleValue);
-            } else {
-                currentUrl.searchParams.append('toggleValue', toggleValue);
-            }
+            var query = "Update category_question SET visible = " + toggleValue + " WHERE pk = " + pk;
+            $.ajax({
+                url: "changeStatus.php",
+                type: "POST",
+                data: {
+                    query: query
+                },
+                success: function(response) {
+                    // console.log(response);
+                    var htmlContent = '<div class="alert alert-success alert-dismissible" role="alert">' +
+                        'Visibility Updated Successfully' +
+                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
 
-            window.history.replaceState({}, document.title, currentUrl.toString());
+                    $("#authenti-inner").append(htmlContent);
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+                },
+                error: function(error) {
+                    // console.log(error);
+                    var htmlContent = '<div class="alert alert-danger alert-dismissible" role="alert">Unexpected Error Occurred' +
+                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
 
-            <?php
-            $pk = isset($_GET["pk"]) ? $_GET["pk"] : null;
-            $toggleValue = isset($_GET["toggleValue"]) ? $_GET["toggleValue"] : 0;
+                    $("#authenti-inner").append(htmlContent);
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+                }
+            });
 
-            echo 'var pk = ' . json_encode($pk) . ';';
-            echo 'var toggleValue = ' . json_encode($toggleValue) . ';';
-
-            echo 'if (toggleValue && pk) {';
-            echo '  var query = "Update category_question SET visible = " + toggleValue + " WHERE pk = " + pk;';
-            echo '  $.ajax({';
-            echo '    url: "changeStatus.php",';
-            echo '    type: "POST",';
-            echo '    data: { query: query },';
-            echo '    success: function(response) {';
-            echo '      console.log(response);';
-            echo '      var htmlContent = \'<div class="alert alert-success alert-dismissible" role="alert">\' +';
-            echo '        "Visibility Updated Successfully" +';
-            echo '        \'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>\';';
-            echo '      $("#authenti-inner").append(htmlContent);';
-            echo '        setTimeout(function() {';
-            echo '          location.reload();'; // Reload the page
-            echo '        }, 2000);';
-            echo '    },';
-            echo '    error: function(error) {';
-            echo '      console.log(error);';
-            echo '      var htmlContent = \'<div class="alert alert-danger alert-dismissible" role="alert">\' +';
-            echo '        "Unexpected Error Occurred" +';
-            echo '        \'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>\';';
-            echo '      $("#authenti-inner").append(htmlContent);';
-            echo '      setTimeout(function() {';
-            echo '      location.reload();'; // Reload the page
-            echo '      }, 2000);';
-            echo '    }';
-            echo '  });';
-            echo '}';
-            ?>
         });
         $('#deleteQuestionModal').on('show.bs.modal', function(event) {
             console.log("Delete Question Clicked");
@@ -327,104 +307,64 @@ if (!isset($_GET['cat_pk'])) {
 
         });
         $('#editQuestionModal').on('show.bs.modal', function(event) {
-            console.log("Add Question Btn added");
             var button = $(event.relatedTarget);
             var pk = button.data('pk');
-            createCookieSeconds("question_id", pk, 10);
+            var query = "SELECT * FROM category_question  WHERE pk=" + pk;
+            $.ajax({
+                url: "changeStatus.php",
+                type: "POST",
+                data: {
+                    query: query
+                },
+                success: function(response) {
+                    question_response = JSON.parse(response);
+                    var query = "SELECT * FROM answer  WHERE question_id=" + question_response.data[0][0];
+                    $.ajax({
+                        url: "changeStatus.php",
+                        type: "POST",
+                        data: {
+                            query: query
+                        },
+                        success: function(answer_response) {
+                            answer_response = JSON.parse(answer_response);
+                            $("#view_category_pk").val(question_response.data[0][0]);
+                            $("#category_question").val(question_response.data[0][1]);
+                            $("#exampleFormControlTextarea1").val(question_response.data[0][3]);
 
-            var currentUrl = new URL(window.location.href);
-            if (currentUrl.searchParams.has('question_id')) {
-                currentUrl.searchParams.set('question_id', pk);
-            } else {
-                currentUrl.searchParams.append('question_id', pk);
-            }
+                            for (var i = 0; i < answer_response.data.length; i++) {
+                                var answerObj = answer_response.data[i];
+                                // console.log(answerObj,"=============");
+                                var id = "#answer" + (i + 1);
+                                $(id).val(answerObj[1]);
 
-            // Set the new URL
-            window.history.replaceState({}, document.title, currentUrl.toString());
-
-            <?php
-            $question_id = isset($_GET["question_id"]) ? $_GET["question_id"] : null;
-            if ($question_id) {
-                $query = "SELECT * FROM category_question WHERE pk = '$question_id'";
-                $result = mysqli_query($conn, $query);
-                $question_obj = mysqli_fetch_assoc($result);
-
-                $qpk = $question_obj['pk'];
-                $query = "SELECT * FROM answer WHERE question_id = '$qpk' ORDER BY pk ASC";
-                $result02 = mysqli_query($conn, $query);
-                $rows = mysqli_fetch_all($result02, MYSQLI_ASSOC);
-
-                $cat_id =  $_GET['cat_pk'];
-                $query = "SELECT * FROM category_question WHERE category_id = '$cat_id'";
-                $res = mysqli_query($conn, $query);
-                $rows21 = mysqli_fetch_all($res, MYSQLI_ASSOC);
-            }
-            ?>
-            var question_obj = <?php echo isset($question_obj) ? json_encode($question_obj) : 'null'; ?>;
-            // console.log(question_obj);
-            var answer_qs = <?php echo isset($rows) ? json_encode($rows) : 'null'; ?>;
-            var question__qs = <?php echo isset($rows21) ? json_encode($rows21) : 'null'; ?>;
-            // console.log("qs");
-            // console.log(question__qs);
+                                var pkid = "#answerID" + (i + 1);
+                                $(pkid).val(answerObj[0]);
 
 
-            if (question__qs !== null) {
-                // console.log("question__qs");
-                // console.log(question__qs);
+                                if (answerObj[3] == 1) {
+                                    var desiredRadioId = "defaultRadio" + (i + 1);
+                                    // console.log(answerObj[1] + " anse");
+                                    $("#" + desiredRadioId).prop("checked", true);
 
-                var trueQuestion = $('#trueQuestion');
-                trueQuestion.empty();
-                trueQuestion.append('<option value="0">No Child Question</option>');
+                                }
 
-                var falseQuestion = $('#falseQuestion');
-                falseQuestion.empty();
-                falseQuestion.append('<option value="0">No Child Question</option>');
-
-                question__qs.forEach(function(question) {
-                    // Create separate options for each question
-                    var optionFalse = $('<option value="' + question.pk + '">' + question.question + '</option>');
-                    var optionTrue = $('<option value="' + question.pk + '">' + question.question + '</option>');
-
-                    // Check if q_id matches question.pk and set the selected attribute individually
-                    if (question_obj['false_child_question'] == question.pk) {
-                        optionFalse.attr('selected', 'selected');
-                    }
-                    falseQuestion.append(optionFalse);
-
-                    if (question_obj['true_child_question'] == question.pk) {
-                        optionTrue.attr('selected', 'selected');
-                    }
-                    trueQuestion.append(optionTrue);
-                });
-            }
+                            }
 
 
+                        },
+                        error: function(error) {
+                            console.log(error);
+
+                        }
+                    });
 
 
-            if (answer_qs !== null || question_obj !== null) {
-
-                $("#view_category_pk").val(question_obj['pk']);
-                $("#category_question").val(question_obj['question']);
-                $("#exampleFormControlTextarea1").val(question_obj['description']);
-
-                for (var i = 0; i < answer_qs.length; i++) {
-                    var answerObj = answer_qs[i];
-                    var id = "#answer" + (i + 1);
-                    $(id).val(answerObj['answer']);
-                    
-                    var pkid = "#answerID"+ (i + 1);
-                    $(pkid).val(answerObj['pk']);
-
-
-                    if (answerObj['status'] == 1) {
-                        var desiredRadioId = "defaultRadio" + (i + 1);
-                        console.log(answerObj['answer'] + " anse");
-                        $("#" + desiredRadioId).prop("checked", true);
-
-                    }
+                },
+                error: function(error) {
+                    console.log(error);
 
                 }
-            }
+            });
 
         });
 
@@ -575,11 +515,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $trueQuestion = 0;
         $description = $_POST['description'];
         $correctAnswer = $_POST['correctAnswer'];
-        
+
         $insertQuery  = "UPDATE category_question SET question = '$category_question',
             description = '$description',true_child_question = '$trueQuestion',false_child_question = '$falseQuestion'
             WHERE pk = '$category_pk'";
-        
+
         $result = mysqli_query($conn, $insertQuery);
         $pk = mysqli_insert_id($conn);
         $i = 1;
