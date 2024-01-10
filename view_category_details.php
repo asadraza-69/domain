@@ -122,7 +122,7 @@ if (!isset($_GET['cat_pk'])) {
                                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                             Close
                                         </button>
-                                        <button type="submit" class="btn btn-primary" name="addQuestion">Add Question</button>
+                                        <button type="submit" class="btn btn-primary" name="addQuestion">Edit Question</button>
                                     </div>
                                 </div>
                             </form>
