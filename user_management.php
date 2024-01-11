@@ -1,10 +1,10 @@
 <?php require "header.php" ?>
 <?php require "navbar.php" ?>
-<?php 
+<?php
 if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
     header("Location: erstekategorie.php ");
     exit();
- }
+}
 
 ?>
 <div class="layout-wrapper layout-content-navbar layout-without-menu">
@@ -101,7 +101,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                         <div class="row">
                                             <div class="col mb-3">
                                                 <label for="AddpasswordWithTitle" class="form-label">Password</label>
-                                                <input type="password" id="editPassword" name="password" class="form-control" placeholder="Enter User Password" required />
+                                                <input type="password" id="editPassword" name="password" class="form-control" placeholder="Enter User Password" />
                                             </div>
                                         </div>
                                         <!-- <div class="row">
@@ -220,15 +220,15 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
                                                 <!-- <i class="bx bxl-angular bx-sm text-danger me-3"></i> -->
                                                 <span class="fw-medium"><?php echo  ucwords($row['email']) ?></span>
                                             </td>
-                                           
+
                                             <td>
                                                 <div class="dropdown">
                                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>
                                                     </button>
                                                     <div class="dropdown-menu">
-                                                        <button data-pk="<?php echo $row['pk']; ?>" data-name="<?php echo $row['full_name']; ?>" data-email="<?php echo $row['email']; ?>" data-password="<?php echo $row['password']; ?>"  data-role="<?php echo $row['role']; ?>" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editCategoryModal"><i class="bx bx-edit-alt me-1"></i> Edit</button>
-                                                        <button data-pk="<?php echo $row['pk']; ?>" data-name="<?php echo $row['full_name']; ?>" data-email="<?php echo $row['email']; ?>" data-password="<?php echo $row['password']; ?>"  data-role="<?php echo $row['role']; ?>"class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal"><i class="bx bx-trash me-1"></i> Delete</button>
+                                                        <button data-pk="<?php echo $row['pk']; ?>" data-name="<?php echo $row['full_name']; ?>" data-email="<?php echo $row['email']; ?>" data-password="<?php echo $row['password']; ?>" data-role="<?php echo $row['role']; ?>" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editCategoryModal"><i class="bx bx-edit-alt me-1"></i> Edit</button>
+                                                        <button data-pk="<?php echo $row['pk']; ?>" data-name="<?php echo $row['full_name']; ?>" data-email="<?php echo $row['email']; ?>" data-password="<?php echo $row['password']; ?>" data-role="<?php echo $row['role']; ?>" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal"><i class="bx bx-trash me-1"></i> Delete</button>
                                                     </div>
                                                 </div>
                                             </td>
@@ -265,8 +265,8 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin') {
             $('#editEmail').val(email);
             // $('#editPassword').val(password);
             $('#editRole').val(role);
-            
-     
+
+
         });
         $('#deleteCategoryModal').on('show.bs.modal', function(event) {
             console.log("Delete Btn Clicked");
@@ -291,8 +291,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $pk = isset($_POST['pk']) ? $_POST['pk'] : null;
     $full_name = mysqli_real_escape_string($conn, $_POST['full_name']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    echo ("password = mysqli_real_escape_string(conn, _POST['password'])");
+    if (isset($_POST['password']) && !empty($_POST['password'])) {
+        $password = mysqli_real_escape_string($conn, $_POST['password']);
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    } else {
+        $password = null;
+    }
     $role = "admin";
 
     if (isset($_POST['addUser'])) {
@@ -345,7 +350,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
     if (isset($_POST['editUser'])) {
-        $query = "UPDATE user SET full_name='$full_name',email='$email',password='$hashedPassword',role='$role' WHERE pk = $pk";
+
+        $query = "UPDATE user SET full_name='$full_name'";
+        $password = isset($password) ? $hashedPassword : null;
+        if ($password != null) {
+            echo "bccc";
+            $query .= ",password='$hashedPassword'";
+        }
+
+        $query .= ",email='$email',role='$role' WHERE pk = $pk";
+
+
         $result = mysqli_query($conn, $query);
         if (!$result) {
             $errorMessage = 'Error Occured while Updating';
